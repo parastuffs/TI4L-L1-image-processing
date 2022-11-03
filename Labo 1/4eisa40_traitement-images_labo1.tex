@@ -141,12 +141,12 @@ functions. For more information, you can visit
 Let's get started with the basics of \opencv's Python API. All the scripts we will write and run
 will be done using the \opencv library, which must be imported with the line \texttt{import cv2}.
 
-To start our manipulations, we will need the help of former chancellor of Germany and PhD holder Angela Merkel. And parrots.
+To start our manipulations, we will need the help of parrots.
 
 \begin{center}
-\includegraphics[width=.35\textwidth]{Merkel_512x512.jpg}
+\includegraphics[width=.45\textwidth]{parrots.jpg}
 \end{center}
-You can download it at \url{https://raw.githubusercontent.com/parastuffs/4EISA-image-processing/main/Labo%201/Merkel_512x512.bmp}, but really any image will do at this stage.
+You can download it at \url{https://raw.githubusercontent.com/parastuffs/4EISA-image-processing/main/Labo%201/parrots.bmp}, but really any image will do at this stage.
 
 The \texttt{cv2.imread(file, mode)} method is used to import an image. It takes two arguments. The first argument \texttt{file} is the image filename. The image should either be in the same directory where the Python script is, or the absolute path should be provided to \texttt{cv2.imread()}. It reads images and saves it as a \numpy array.
 The second argument is a flag which specifies the mode the image should be read in. The flag can have following values:
@@ -163,8 +163,8 @@ Write following code in a new python script:
 #This imports opencv
 import cv2
 #This reads and stores image in color into variable img
-img = cv2.imread('Merkel_512x512.bmp',cv2.IMREAD_COLOR)
-img = cv2.imread('Merkel_512x512.bmp',1)
+img = cv2.imread('parrots.bmp',cv2.IMREAD_COLOR)
+img = cv2.imread('parrots.bmp',1)
 \end{minted}
 The last two lines are doing exactly the same thing.
 
@@ -187,7 +187,7 @@ The \texttt{cv2.imwrite(file, image)} method is used to save an image to a speci
 
 \begin{minted}{python}
 import cv2
-img = cv2.imread('Merkel_512x512.bmp',1)
+img = cv2.imread('parrots.bmp',1)
 cv2.imshow('Parrots',img)
 cv2.waitKey(0)
 cv2.imwrite('output.jpg',img)
@@ -201,7 +201,7 @@ cv2.destroyWindow('Parrots')
 import cv2
 import matplotlib.pyplot as plt
 # Program to load a color image in gray scale and to display it using matplotlib
-img = cv2.imread('Merkel_512x512.bmp',0)
+img = cv2.imread('parrots.bmp',0)
 plt.imshow(img,cmap='gray')
 plt.title('Parrots')
 plt.xticks([])
@@ -209,7 +209,9 @@ plt.yticks([])
 plt.show()
 \end{minted}
 
-Try again the code but without the argument \texttt{cmap=’gray’}. What happens to Angela Merkel and the parrots?\\
+\begin{leftbar}
+Try again the code but without the argument \texttt{cmap=’gray’}. What happens to the parrots?
+\end{leftbar}
 
 The colours are all wrong because the \texttt{cv2.imread()} function of \opencv reads images and saves it as a \numpy array of Blue, Green, and Red (BGR) pixels.\\
 
@@ -258,8 +260,9 @@ We can also print text in the image with \texttt{cv2.putText()}. The following c
 cv2.putText(image,'Test',(80,180),cv2.FONT_HERSHEY_DUPLEX,1,(255,0,255))
 \end{minted}
 
+\begin{leftbar}
 Take your time to get used to the environment and do your own draft.
-
+\end{leftbar}
 
 
 
@@ -330,7 +333,7 @@ First of all, to process an image it is interesting to know the properties of th
 
 \begin{minted}{python}
 import cv2
-img = cv2.imread('lena.bmp',1)
+img = cv2.imread('parrots.bmp',1)
 print(img.shape)
 print(img.size)
 print(img.dtype)
@@ -353,7 +356,7 @@ Images must be of the same size for you to perform arithmetic operations on the 
 Here is an example of use:
 \begin{minted}{python}
 import cv2
-img1 = cv2.imread('Merkel_512x512.bmp',1)
+img1 = cv2.imread('parrots.bmp',1)
 img2 = cv2.imread('another_img.bmp',1)
 cv2.imshow('Image1',img1)
 cv2.waitKey(0)
@@ -394,7 +397,7 @@ We can create a film-style transition effect on the two images by using the same
 import cv2
 import numpy as np
 import time
-img1 = cv2.imread('Merkel_512x512.bmp',1)
+img1 = cv2.imread('parrots.bmp',1)
 img2 = cv2.imread('another_img.bmp',1)
 for i in np.linspace(0,1,40):
 	alpha = i
@@ -412,7 +415,7 @@ On several occasions, we may be interested in working separately with the red, g
 
 \begin{minted}{python}
 import cv2
-img = cv2.imread('Merkel_512x512.bmp',1)
+img = cv2.imread('parrots.bmp',1)
 b,g,r = cv2.split(img)
 cv2.imshow('Blue Channel', b)
 cv2.imshow('Green Channel', g)
@@ -430,7 +433,7 @@ In mathematical terms, the negative of an image is the inversion of colours. For
 
 \begin{minted}{python}
 import cv2
-img = cv2.imread('Merkel_512x512.bmp')
+img = cv2.imread('parrots.bmp')
 grayscale = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 negative = abs(255-grayscale)
 cv2.imshow('Original',img)
