@@ -78,176 +78,228 @@ linenos
 
 \tptitle{}{Image Processing -- Session 3\\}
 
-In this session, you will be able to obtain more details about a picture and interact with the raspberry Pi through the PiCamera.
+In this session, you will get into practical applications of openCV operations applied on the camera feed.
 
-\section*{Restoring images using inpainting}
-Image restoration is the process of reconstructing the damaged parts of an image. In digital images, data errors can be introduced in an image during the transmission and reception. For example, when images are transmitted byte by byte (instead of packets), it is not feasible to use modern error checking and corrective networking protocols, which increases the probability of getting erroneous data. Many of these degraded images can be restored using the image \textbf{inpainting} technique. There are several algorithms available for the same, and OpenCV offers two of these with its \texttt{cv2.inpaint()} function\footnote{\texttt{cv2.INPAINT\_TELEA} is based on the paper \textit{An Image Inpainting Technique Based on the Fast Marching Method} by Alexandru Telea published in 2004, and \texttt{cv2.INPAINT\_NS} is based on \textit{Navier-Stokes, Fluid Dynamics, and Image and Video Inpainting}, by Bertalmio, Marcelo, Andrea L. Bertozzi, and Guillermo Sapiro published in 2001.}.\\
+\section*{}
 
-It accepts a source image, an \textit{inpaint} mask that is a greyscale image representation of the damaged area where the non-zero (white) pixels denote the area to be inpainted, an inpaint neighbourhood side, and an algorithm that has to be applied as parameters. The function then returns the inpainted image. The following code demonstrates the implementation of both of these methods that are available in \opencv for inpainting. The results are almost the same in both the algorithms. We manually created the damage and the corresponding mask (by inverting the damage pixels) in an image manipulation software:
 
+
+\section*{Green screen chroma key}
+Chroma key is a special effect and a post-production technique in which multiple images can be combined together. 
+This technique is widely used to replace green or blue backgrounds in an image with another image or live video to create special effects in live action or animation movies and weather forecasting. 
+The logic on which the chroma key technique is based is very simple: we use a uniform-colored background, usually bright green or blue, and then replace that with an image or another live video.
+
+Start by importing the needed packages and initialising the capture:
 \begin{minted}{python}
-import cv2 
-import matplotlib.pyplot as plt 
-image = cv2.imread('degraded.png') 
-mask = cv2.imread('msk.png',0) 
-input_img = cv2.cvtColor( image , cv2.COLOR_BGR2RGB ) 
-output_TELEA = cv2.inpaint(input_img,mask,5,cv2.INPAINT_TELEA) 
-output_NS = cv2.inpaint(input_img,mask,5,cv2.INPAINT_NS) 
-titles = ['Damaged Image', 'Mask', 'Telea Method', 'Navier Stokes Method']
-images = [input_img, mask, output_TELEA, output_NS
-for i in range(len(titles)):
-	plt.subplot(221+i)
-	if titles[i] == 'Mask':
-		plt.imshow(images[i],cmap='gray')
-	else:
-		plt.imshow(images[i])
-	plt.imshow(images[i])
-	plt.title(titles[i])
-	plt.xticks([])
-	plt.yticks([]) 
-plt.show()
+import numpy as np
+import cv2
+
+cam = cv2.VideoCapture(0)
+\end{minted}
+
+You can lower the camera resolution to try to get a better frame rate:
+\begin{minted}{python}
+cam.set(3,640)
+cam.set(4,480)
+\end{minted}
+
+Let's say your happy face is taken on a uniform green background as illustrated on Figure~\ref{fig:green-bg}.
+
+% \begin{figure}[ht!]
+% \centering
+% \includegraphics[]{}
+% \caption{}
+% \label{fig:green-bg}
+% \end{figure}
+
+You can get that feed from the camera:
+\begin{minted}{python}
+while(true):
+	ret, frame = cam.read()
+\end{minted}
+
+As we saw in session \textbf{which session??}, the  HSV colour format is the most appropriate format for any type of activity that involves operation on a range of colours; we will convert the image into the HSV format and calculate the mask for the green background, as follows:
+\begin{minted}{python}
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+image_mask = cv2.inRange(hsv, np.array([40,50,50]), np.array([80,255,255])
 \end{minted}
 
 
 
 
 
-\section*{K-means clustering and image quantisation}
-The k-means clustering algorithm is a quantisation algorithm that maps sets of values within a range into a cluster determined by a value (mean). It basically divides a given set of n values into k partitions. This is called clustering when it's applied on data with two or more dimensions. \opencv has \texttt{cv2.kmeans()} for the implementation of the k-means algorithm. It accepts the following parameters:
-\begin{itemize}
-	\item Data: This is the data that has to be clustered. If we provide an image, the output will be a quantised (segmented) image. This has to be in the float format. 
-	\item K: This is the number of partitions in the output set (it is the number of colours in the output if the input is an image). 
-	\item Criteria: This is the algorithm termination criteria that includes a number of iterations and/or the desired accuracy. 
-	\item Attempts: This is the number of times the algorithms will be executed using a different initial labelling. 
-	\item Flags: These specify the initial centres of the clusters, which can have any of the following values: \texttt{cv2.KMEANS\_RANDOM\_CENTERS}, \texttt{cv2.KMEANS\_PP\_CENTERS} or \texttt{cv2.KMEANS\_USE\_INITIAL\_LABELS}.
-\end{itemize}
-
-\begin{minted}{python}
-import cv2 
-import numpy as np 
-import matplotlib.pyplot as plt 
-image=cv2.imread('italy.png') 
-input_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB) 
-Z = input_img.reshape((-1,3)) 
-Z = np.float32(Z) 
-criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,10,1.0) 
-K = 2 
-ret,label1,center1 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
-center1 = np.uint8(center1) 
-res1 = center1[label1.flatten()] 
-output1 = res1.reshape((image.shape)) 
-K = 4 
-ret,label2,center2 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
-center2 = np.uint8(center2) 
-res2 = center2[label2.flatten()] 
-output2 = res2.reshape((image.shape)) 
-K = 8 
-ret,label3,center3 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
-center3 = np.uint8(center3) 
-res3 = center3[label3.flatten()] 
-output3 = res3.reshape((image.shape)) 
-titles = ['Original','K=2','K=4','K=8'] 
-output = [input_img,output1,output2,output3] 
-for i in range(4): 
-	plt.subplot(2,2,i+1)
-	plt.imshow(output[i])
-	plt.title(titles[i]) 
-	plt.xticks([])
-	plt.yticks([]) 
-plt.show()
-\end{minted}
-
-We initially assigned random centres to all the clusters with the \texttt{cv2.KMEANS\_RANDOM\_CENTERS} flag. The output of the preceding program will be the original image with the quantized and segmented images, with 2, 4, and 8 colours\footnote{The execution time might be longer than usual (over a few minutes).}. 
-\begin{leftbar}
-As an exercise, try using the algorithm with different sets and combinations of inputs and compare the results.
-\end{leftbar}
-
-\section*{Disparity map and depth estimation}
-Disparity refers to the difference in the location of an object in the corresponding two (left and right) images as seen by the left and right eye, which is created due to a parallax. Our brain uses this disparity to estimate the depth information from the pair of two-dimensional images. We can calculate the disparity between the two images by applying this principle to every pixel in the pair of images. Once we have the disparity information, we can leverage it to estimate the depth just the way our brain uses it to estimate depth. In biology, this is called stereoscopic vision. OpenCV provides the \texttt{cv2.StereoBM.compute()} function, which takes the left image and the right image as a parameter and returns the disparity map of the image pair. The \texttt{cv2.StereoBM()} function is the constructor that initializes the stereo state. It accepts a preset, the number of disparities (which is a multiple of 16), and \texttt{SADWindowSize}, which is a linear block size for comparison. This stereo state is implicitly used to compute disparity map by \texttt{cv2.StereoBM.compute()}.
-
-\begin{minted}{python}
-import cv2 
-import numpy as np 
-import matplotlib.pyplot as plt 
-Right = cv2.imread('img4.png',0) 
-Left = cv2.imread('img3.png',0) 
-stereo_BM_state = cv2.StereoBM_create(numDisparities=32, blockSize=27)
-output_map = stereo_BM_state.compute(Left,Right) 
-titles = ['Left','Right','Depth Map'] 
-output = [Left,Right,output_map] 
-for i in range(3): 
-	plt.subplot(1,3,i+1)
-	plt.imshow(output[i],cmap='gray') 
-	plt.title(titles[i]) 
-	plt.xticks([])
-	plt.yticks([]) 
-plt.show()
-\end{minted}
-
-A smaller \texttt{SADWindowSize} value will provide a detailed but distorted map, and a higher value will provide a smoother map, as seen in the preceding output. 
-\begin{leftbar}
-As an exercise, try out different values of \texttt{ndisparities} and \texttt{SADWindowSize}. \texttt{SADWindowSize} has to be an odd positive value. 
-\end{leftbar}
-
-In the preceding image, the brighter areas denote more disparity, which means that the objects in the input images corresponding to the brighter areas in the output image are closer to the cameras. In the same way, the darker colours in the disparity map mean that the corresponding objects in the images are farther from the camera.
 
 
+% In this session, you will be able to obtain more details about a picture and interact with the raspberry Pi through the PiCamera.
 
+% \section*{Restoring images using inpainting}
+% Image restoration is the process of reconstructing the damaged parts of an image. In digital images, data errors can be introduced in an image during the transmission and reception. For example, when images are transmitted byte by byte (instead of packets), it is not feasible to use modern error checking and corrective networking protocols, which increases the probability of getting erroneous data. Many of these degraded images can be restored using the image \textbf{inpainting} technique. There are several algorithms available for the same, and OpenCV offers two of these with its \texttt{cv2.inpaint()} function\footnote{\texttt{cv2.INPAINT\_TELEA} is based on the paper \textit{An Image Inpainting Technique Based on the Fast Marching Method} by Alexandru Telea published in 2004 (\href{http://dx.doi.org/10.1080/10867651.2004.10487596}{10.1080/10867651.2004.10487596}), and \texttt{cv2.INPAINT\_NS} is based on \textit{Navier-Stokes, Fluid Dynamics, and Image and Video Inpainting}, by Bertalmio, Marcelo, Andrea L. Bertozzi, and Guillermo Sapiro published in 2001 (\href{http://dx.doi.org/10.1109/CVPR.2001.990497}{10.1109/CVPR.2001.990497}).}.\\
 
-\section*{Image histograms}
-A histogram is a way to graphically represent the distribution of data. An image histogram is the representation of an image array. It represents the tonal distribution of the digital image. Basically, the histogram of an image is a graphical representation of the distribution of colour or luminance variance in an image. In an image histogram, the x axis represents the variation of colours, and the y axis represents the total number of pixels for a particular colour tone. If we were to plot a histogram for a greyscale image, the x axis will represent the different intensity values (0 to 255, for example), and the y axis will represent the number of pixels that have such values.\\
+% It accepts a source image, an \textit{inpaint} mask that is a greyscale image representation of the damaged area where the non-zero (white) pixels denote the area to be inpainted, an inpaint neighbourhood side, and an algorithm that has to be applied as parameters. The function then returns the inpainted image. The following code demonstrates the implementation of both of these methods that are available in \opencv for inpainting. The results are almost the same in both the algorithms. We manually created the damage and the corresponding mask (by inverting the damage pixels) in an image manipulation software:
 
-In a similar way, we can plot the histogram for colour images by plotting the image histogram for each channel (red, green, and blue, for example). Let's get started by plotting a histogram of a greyscale image. We will use the hist() function that belongs to the \texttt{matplotlib} library. Run the following code:
-
-\begin{minted}{python}
-import cv2 
-import matplotlib.pyplot as plt 
-img = cv2.imread('parrots.bmp',0) 
-plt.hist(img.ravel(),256,[0,256]) 
-plt.show()
-\end{minted}
-
-In the preceding code, we passed an image, the number of vertical edges in the histogram, and a range as an argument to the \texttt{plt.hist()} function. You can pass more arguments to this function\footnote{Full doc online: \url{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html}}.\\
-
-\opencv also has a function to plot histograms for colour images. The \texttt{cv2.calcHist()} function accepts an image, channel, mask, size, and range as arguments. The following example shows its usage by plotting a histogram for each channel (red, green, and blue):
-
-\begin{minted}{python}
-import cv2 
-import matplotlib.pyplot as plt 
-img = cv2.imread('parrots.bmp',1) 
-input_img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR) 
-histr_RED = cv2.calcHist([input_img],[0],None,[256],[0,256]) 
-histr_GREEN = cv2.calcHist([input_img],[1],None,[256],[0,256]) 
-histr_BLUE = cv2.calcHist([input_img],[2],None,[256],[0,256]) 
-titles = ['Red', 'Green', 'Blue']
-histograms = [histr_RED, histr_GREEN, histr_BLUE]
-colours = ['r', 'g', 'b']
-plt.subplot(221)
-plt.imshow(input_img)
-plt.title('Original Image')
-plt.xticks([])
-plt.yticks([]) 
-for i in range(len(titles)):
-	plt.subplot(222+i)
-	plt.plot(histograms[i],color=colours[i]) 
-	plt.title(titles[i]) 
-	plt.xlim([0,256])
-	plt.yticks([])
-plt.show()
-\end{minted}
-
-\section*{Image contours}
+% \begin{minted}{python}
+% import cv2 
+% import matplotlib.pyplot as plt 
+% image = cv2.imread('degraded.png') 
+% mask = cv2.imread('msk.png',0) 
+% input_img = cv2.cvtColor( image , cv2.COLOR_BGR2RGB ) 
+% output_TELEA = cv2.inpaint(input_img,mask,5,cv2.INPAINT_TELEA) 
+% output_NS = cv2.inpaint(input_img,mask,5,cv2.INPAINT_NS) 
+% titles = ['Damaged Image', 'Mask', 'Telea Method', 'Navier Stokes Method']
+% images = [input_img, mask, output_TELEA, output_NS
+% for i in range(len(titles)):
+% 	plt.subplot(221+i)
+% 	if titles[i] == 'Mask':
+% 		plt.imshow(images[i],cmap='gray')
+% 	else:
+% 		plt.imshow(images[i])
+% 	plt.imshow(images[i])
+% 	plt.title(titles[i])
+% 	plt.xticks([])
+% 	plt.yticks([]) 
+% plt.show()
+% \end{minted}
 
 
 
 
 
+% \section*{K-means clustering and image quantisation}
+% The k-means clustering algorithm is a quantisation algorithm that maps sets of values within a range into a cluster determined by a value (mean). It basically divides a given set of n values into k partitions. This is called clustering when it's applied on data with two or more dimensions. \opencv has \texttt{cv2.kmeans()} for the implementation of the k-means algorithm. It accepts the following parameters:
+% \begin{itemize}
+% 	\item Data: This is the data that has to be clustered. If we provide an image, the output will be a quantised (segmented) image. This has to be in the float format. 
+% 	\item K: This is the number of partitions in the output set (it is the number of colours in the output if the input is an image). 
+% 	\item Criteria: This is the algorithm termination criteria that includes a number of iterations and/or the desired accuracy. 
+% 	\item Attempts: This is the number of times the algorithms will be executed using a different initial labelling. 
+% 	\item Flags: These specify the initial centres of the clusters, which can have any of the following values: \texttt{cv2.KMEANS\_RANDOM\_CENTERS}, \texttt{cv2.KMEANS\_PP\_CENTERS} or \texttt{cv2.KMEANS\_USE\_INITIAL\_LABELS}.
+% \end{itemize}
+
+% \begin{minted}{python}
+% import cv2 
+% import numpy as np 
+% import matplotlib.pyplot as plt 
+% image=cv2.imread('italy.png') 
+% input_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB) 
+% Z = input_img.reshape((-1,3)) 
+% Z = np.float32(Z) 
+% criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,10,1.0) 
+% K = 2 
+% ret,label1,center1 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
+% center1 = np.uint8(center1) 
+% res1 = center1[label1.flatten()] 
+% output1 = res1.reshape((image.shape)) 
+% K = 4 
+% ret,label2,center2 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
+% center2 = np.uint8(center2) 
+% res2 = center2[label2.flatten()] 
+% output2 = res2.reshape((image.shape)) 
+% K = 8 
+% ret,label3,center3 = cv2.kmeans(Z,K,none,criteria,10,cv2.KMEANS_RANDOM_CENTERS) 
+% center3 = np.uint8(center3) 
+% res3 = center3[label3.flatten()] 
+% output3 = res3.reshape((image.shape)) 
+% titles = ['Original','K=2','K=4','K=8'] 
+% output = [input_img,output1,output2,output3] 
+% for i in range(4): 
+% 	plt.subplot(2,2,i+1)
+% 	plt.imshow(output[i])
+% 	plt.title(titles[i]) 
+% 	plt.xticks([])
+% 	plt.yticks([]) 
+% plt.show()
+% \end{minted}
+
+% We initially assigned random centres to all the clusters with the \texttt{cv2.KMEANS\_RANDOM\_CENTERS} flag. The output of the preceding program will be the original image with the quantized and segmented images, with 2, 4, and 8 colours\footnote{The execution time might be longer than usual (over a few minutes).}. 
+% \begin{leftbar}
+% As an exercise, try using the algorithm with different sets and combinations of inputs and compare the results.
+% \end{leftbar}
+
+% \section*{Disparity map and depth estimation}
+% Disparity refers to the difference in the location of an object in the corresponding two (left and right) images as seen by the left and right eye, which is created due to a parallax. Our brain uses this disparity to estimate the depth information from the pair of two-dimensional images. We can calculate the disparity between the two images by applying this principle to every pixel in the pair of images. Once we have the disparity information, we can leverage it to estimate the depth just the way our brain uses it to estimate depth. In biology, this is called stereoscopic vision. OpenCV provides the \texttt{cv2.StereoBM.compute()} function, which takes the left image and the right image as a parameter and returns the disparity map of the image pair. The \texttt{cv2.StereoBM()} function is the constructor that initializes the stereo state. It accepts a preset, the number of disparities (which is a multiple of 16), and \texttt{SADWindowSize}, which is a linear block size for comparison. This stereo state is implicitly used to compute disparity map by \texttt{cv2.StereoBM.compute()}.
+
+% \begin{minted}{python}
+% import cv2 
+% import numpy as np 
+% import matplotlib.pyplot as plt 
+% Right = cv2.imread('img4.png',0) 
+% Left = cv2.imread('img3.png',0) 
+% stereo_BM_state = cv2.StereoBM_create(numDisparities=32, blockSize=27)
+% output_map = stereo_BM_state.compute(Left,Right) 
+% titles = ['Left','Right','Depth Map'] 
+% output = [Left,Right,output_map] 
+% for i in range(3): 
+% 	plt.subplot(1,3,i+1)
+% 	plt.imshow(output[i],cmap='gray') 
+% 	plt.title(titles[i]) 
+% 	plt.xticks([])
+% 	plt.yticks([]) 
+% plt.show()
+% \end{minted}
+
+% A smaller \texttt{SADWindowSize} value will provide a detailed but distorted map, and a higher value will provide a smoother map, as seen in the preceding output. 
+% \begin{leftbar}
+% As an exercise, try out different values of \texttt{ndisparities} and \texttt{SADWindowSize}. \texttt{SADWindowSize} has to be an odd positive value. 
+% \end{leftbar}
+
+% In the preceding image, the brighter areas denote more disparity, which means that the objects in the input images corresponding to the brighter areas in the output image are closer to the cameras. In the same way, the darker colours in the disparity map mean that the corresponding objects in the images are farther from the camera.
 
 
 
-\begin{minted}{python}
 
-\end{minted}
+% \section*{Image histograms}
+% A histogram is a way to graphically represent the distribution of data. An image histogram is the representation of an image array. It represents the tonal distribution of the digital image. Basically, the histogram of an image is a graphical representation of the distribution of colour or luminance variance in an image. In an image histogram, the x axis represents the variation of colours, and the y axis represents the total number of pixels for a particular colour tone. If we were to plot a histogram for a greyscale image, the x axis will represent the different intensity values (0 to 255, for example), and the y axis will represent the number of pixels that have such values.\\
+
+% In a similar way, we can plot the histogram for colour images by plotting the image histogram for each channel (red, green, and blue, for example). Let's get started by plotting a histogram of a greyscale image. We will use the hist() function that belongs to the \texttt{matplotlib} library. Run the following code:
+
+% \begin{minted}{python}
+% import cv2 
+% import matplotlib.pyplot as plt 
+% img = cv2.imread('parrots.bmp',0) 
+% plt.hist(img.ravel(),256,[0,256]) 
+% plt.show()
+% \end{minted}
+
+% In the preceding code, we passed an image, the number of vertical edges in the histogram, and a range as an argument to the \texttt{plt.hist()} function. You can pass more arguments to this function\footnote{Full doc online: \url{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html}}.\\
+
+% \opencv also has a function to plot histograms for colour images. The \texttt{cv2.calcHist()} function accepts an image, channel, mask, size, and range as arguments. The following example shows its usage by plotting a histogram for each channel (red, green, and blue):
+
+% \begin{minted}{python}
+% import cv2 
+% import matplotlib.pyplot as plt 
+% img = cv2.imread('parrots.bmp',1) 
+% input_img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR) 
+% histr_RED = cv2.calcHist([input_img],[0],None,[256],[0,256]) 
+% histr_GREEN = cv2.calcHist([input_img],[1],None,[256],[0,256]) 
+% histr_BLUE = cv2.calcHist([input_img],[2],None,[256],[0,256]) 
+% titles = ['Red', 'Green', 'Blue']
+% histograms = [histr_RED, histr_GREEN, histr_BLUE]
+% colours = ['r', 'g', 'b']
+% plt.subplot(221)
+% plt.imshow(input_img)
+% plt.title('Original Image')
+% plt.xticks([])
+% plt.yticks([]) 
+% for i in range(len(titles)):
+% 	plt.subplot(222+i)
+% 	plt.plot(histograms[i],color=colours[i]) 
+% 	plt.title(titles[i]) 
+% 	plt.xlim([0,256])
+% 	plt.yticks([])
+% plt.show()
+% \end{minted}
+
+% \section*{Image contours}
+
+
+
+
+
+
+
+
+% \begin{minted}{python}
+
+% \end{minted}
 
 %\Question{}{}
 \end{document}
