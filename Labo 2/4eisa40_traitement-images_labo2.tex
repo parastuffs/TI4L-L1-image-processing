@@ -177,8 +177,12 @@ output = cv2.bitwise_and(frame, frame, mask=image_mask)
 \end{minted}
 
 \begin{leftbar}
-Now, try to do adapt the code and find out the {\color{blue}blue} and {\color{green}green} M\&Ms from the picture.
+Now, try to adapt the code and find out the {\color{blue}blue} and {\color{green}green} M\&Ms from the picture.
 \end{leftbar}
+
+\begin{center}
+	\includegraphics[width=.5\textwidth]{Plain-M&Ms-Pile.jpg}
+\end{center}
 
 \section*{Image transformation}
 Various transformations can be applied on an image. In this section we will discuss some fundamental ones.
@@ -298,7 +302,7 @@ plt.title('Affine Output')
 plt.show()
 \end{minted}
 
-As we often say\dots~ ``changing our perspective'' can offer us some opportunities. This modification is also available in image processing. The \textbf{perspective transformation} needs four points in an input image and four corresponding point in the output image\footnote{Three of the points cannot be collinear, in other words, three out of the four point cannot be part of a line.}. A real-life example would be a numerical zoom on a picture.\\
+As we often say\dots~ ``changing our perspective'' can offer us some opportunities. This modification is also available in image processing. The \textbf{perspective transformation} needs four points in an input image and four corresponding point in the output image\footnote{Three of the points cannot be collinear, in other words, three out of the four point cannot be part of a straight line.}. A real-life example would be a numerical zoom on a picture.\\
 
 To get a better idea of the \textbf{perspective transformation}, let’s write it in a code. We will use \texttt{cv2.getPerspectiveTransform()} to generate the transformation matrix and \texttt{cv2.warpPerspective()} to get the transformed output:
 
@@ -329,7 +333,7 @@ Try passing various combination of the parameters to see how the resultant image
 
 \textbf{Thresholding} is a simple way to segment images\footnote{Best on greyscale images but algorithms are also available for coloured images.}. Usually, the thresholding is the first step to perform in image processing and it converts the greyscale into a binary image of black and white but some algorithms maintain some level of grey. \\
 
-To perform a thresholding, you first need to define the threshold in a greyscale intensity for which all the pixel will be compared with. For example, if the value of the pixel is above the threshold, the pixel becomes white and black otherwise\footnote{The decision of conversion into black or white is arbitrarily defined in the code}. \\
+To perform a thresholding, you first need to define the threshold in a greyscale intensity for which all the pixel will be compared with. For example, if the value of the pixel is above the threshold, the pixel becomes white and black otherwise\footnote{The decision of conversion into black or white is arbitrarily defined in the code.}. \\
 
 In \opencv, the \texttt{cv2.threshold()} function is used to threshold images. It takes as inputs: greyscale image, threshold value, maxVal, and threshold method, and returns the thresholded image as output. The maxVal parameter is the value assigned to the pixel if the pixel intensity is greater (or less in some methods) than the threshold. There are five threshold methods available in \opencv; in the beginning, the simplest form of thresholding we saw is \texttt{cv2.THRESH\_BINARY}. Let's see the mathematical representation of all the threshold methods.\\
 
@@ -366,7 +370,7 @@ for i in range(6):
 plt.show()
 \end{minted}
 
-Other methods exist such as the Otsu’s method\footnote{Discussed in the reference book}p. For more information, you may be interested to look into the python library. A nice function to use is the \texttt{cv2.adaptiveThreshold()}, which is used for adaptive thresholding of images based on uneven lighting conditions.
+Other methods exist such as the Otsu’s method\footnote{Discussed in the reference book}. For more information, you may be interested to look into the \href{https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html}{OpenCV library}. A nice function to use is the \texttt{cv2.adaptiveThreshold()}, which is used for adaptive thresholding of images based on uneven lighting conditions.
 
 
 \section*{Edge detection}
@@ -565,8 +569,8 @@ Run the preceding program and check the output yourself. The Hough transform fun
 
 
 
-\section*{Challenge}
-In the reference book\footnote{``\textit{Raspberry Pi Computer Vision Programming}'' by Ashwin Pajankar.}, Chapter 9 – Barcode detection. Follow the instruction to understand how the detection works and apply it on the image from the Zip file. Once you succeeded in isolating the barcode, generate an output image with only the barcode.
+% \section*{Challenge}
+% In the reference book\footnote{``\textit{Raspberry Pi Computer Vision Programming}'' by Ashwin Pajankar.}, Chapter 9 – Barcode detection. Follow the instruction to understand how the detection works and apply it on the image from the Zip file. Once you succeeded in isolating the barcode, generate an output image with only the barcode.
 
 
 
