@@ -47,7 +47,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[4EISA] Image Processing\\ LAB 1 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.0.1\\ page \thepage}
+\rhead{v1.0.2\\ page \thepage}
 \cfoot{}
 %%
 
@@ -89,7 +89,7 @@ Update your \texttt{numpy} installation: \texttt{pip3 install -U numpy}, then ru
 \begin{minted}{shell-session}
 $ python3
 	>>> import cv2
-	>>> print cv2.__version__
+	>>> print(cv2.__version__)
 	4.6.0
 \end{minted}
 
@@ -454,15 +454,15 @@ Let's have a look at the following code:
 \begin{minted}{python}
 import cv2
 import matplotlib.pyplot as plt
-img1 = cv2.imread('Barcode_Hor.png',0)
-img2 = cv2.imread('Barcode_Ver.png',0)
+img1 = cv2.imread('parrots.bmp',0)
+img2 = cv2.imread('shiba.bmp',0)
 not_out=cv2.bitwise_not(img1)
 and_out=cv2.bitwise_and(img1,img2)
 or_out=cv2.bitwise_or(img1,img2)
 xor_out=cv2.bitwise_xor(img1,img2)
 titles = ['Image 1','Image 2','Image 1 NOT','AND','OR','XOR']
 images = [img1,img2,not_out,and_out,or_out,xor_out]
-for i in xrange(6):
+for i in range(6):
 	plt.subplot(2,3,i+1)
 	plt.imshow(images[i],cmap='gray')
 	plt.title(titles[i])
@@ -470,7 +470,7 @@ for i in xrange(6):
 plt.show()
 \end{minted}
 
-We first read the images in greyscale mode and calculated the NOT, AND, OR, and XOR, functionalities and then with \texttt{matplotlib}, we displayed those in a neat way. We leveraged the \texttt{mplt.subplot()} function to display multiple images. Here in the preceding example, we created a grid with two rows and three columns for our images and displayed each image in every part of the grid. You can modify this line and change it to \texttt{mplt.subplot(3,2,i+1)} to create a grid with three rows and two columns. We will use this technique heavily throughout the book to display images side-by-side or in a grid.\\
+We first read the images in greyscale mode and calculated the NOT, AND, OR, and XOR, functionalities and then with \texttt{matplotlib}, we displayed those in a neat way. We leveraged the \texttt{mplt.subplot()} function to display multiple images. Here in the preceding example, we created a grid with two rows and three columns for our images and displayed each image in every part of the grid. You can modify this line and change it to \texttt{mplt.subplot(3,2,i+1)} to create a grid with three rows and two columns.\\
 
 You may want to have a look at the functionality of \texttt{cv2.copyMakeBorder()}. This function is used to create the borders and paddings for images, and many of you will find it useful for your projects.
 
