@@ -23,6 +23,7 @@
 \usepackage{pgfplots} %for latex grid
 \usepackage{fontawesome}
 \usepackage{charter}
+\usepackage{subfig}
 
 \usepackage{minted}
 
@@ -87,7 +88,7 @@ In this session, you will get into practical applications of openCV operations a
 \section*{Green screen chroma key}
 Chroma key is a special effect and a post-production technique in which multiple images can be combined together. 
 This technique is widely used to replace green or blue backgrounds in an image with another image or live video to create special effects in live action or animation movies and weather forecasting. 
-The logic on which the chroma key technique is based is very simple: we use a uniform-colored background, usually bright green or blue, and then replace that with an image or another live video.
+The logic on which the chroma key technique is based is very simple: we use a uniform-coloured background, usually bright green or blue, and then replace that with an image or another live video.
 
 Start by importing the needed packages and initialising the capture:
 \begin{minted}{python}
@@ -103,28 +104,163 @@ cam.set(3,640)
 cam.set(4,480)
 \end{minted}
 
-Let's say your happy face is taken on a uniform green background as illustrated on Figure~\ref{fig:green-bg}.
+Let's say your subject is taken on a relatively uniform background as illustrated on Figure~\ref{fig:pink-bg}.
 
-% \begin{figure}[ht!]
-% \centering
-% \includegraphics[]{}
-% \caption{}
-% \label{fig:green-bg}
-% \end{figure}
 
-You can get that feed from the camera:
+You can get that feed from the camera or load it from file:
 \begin{minted}{python}
 while(true):
-	ret, frame = cam.read()
+	ret, frame = cam.read() # From the camera
+frame = cv2.imread("akabeko-pink-bg.png") # From a static image
 \end{minted}
 
-As we saw in session \textbf{which session??}, the  HSV colour format is the most appropriate format for any type of activity that involves operation on a range of colours; we will convert the image into the HSV format and calculate the mask for the green background, as follows:
+As we saw previously, the  HSV colour format is the most appropriate format for any type of activity that involves operation on a range of colours; we will convert the image into the HSV format and calculate the mask for the green background, as follows:
 \begin{minted}{python}
 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-image_mask = cv2.inRange(hsv, np.array([40,50,50]), np.array([80,255,255])
+image_mask = cv2.inRange(hsv, np.array([5,80,150]), np.array([6,100,200]))
+\end{minted}
+
+The image mask will appear as on Figure\ref{fig:pink-bg-mask}, where pink pixels are replaced by the colour white and others are assigned the colour black.
+
+
+Once we have obtained the background image mask, we can easily apply it on the background image to obscure the foreground object with black pixels as follows:
+\begin{minted}{python}
+bg_mask = cv2.bitwise_and(bg,bg,mask=image_mask)
+\end{minted}
+
+The result will replace all the white pixels with the background image and the foreground area will still have the black pixels, as seen here on Figure~\ref{fig:bg-mask}.
+
+
+Now, we need to extract only the foreground image from our camera feed or original image. This can be accomplished by using the following code:
+\begin{minted}{python}
+fg_mask = cv2.bitwise_and(frame,frame,mask = cv2.bitwise_not(image_mask))
+\end{minted}
+This will extract all the non-green objects, while assigning the colour black to the pixels corresponding to the green background.
+
+Finally, we will add our last two image outputs, which will provide us with the required chroma key effect, by replacing the green screen with the custom background on Figure~\ref{akabeko-space-bg}.
+\begin{minted}{python}
+cv2.imshow('Output',cv2.add(bg_mask,fg_mask))
+if cv2.waitKey(1) == 27:
+	break
+cv2.destroyAllWindows()
+cam.release()
 \end{minted}
 
 
+\begin{figure}[h]
+\centering
+\subfloat[Original image\label{fig:pink-bg}]{%
+	\includegraphics[width=.45\textwidth]{akabeko-pink-bg.png}%
+}
+\hfill
+\subfloat[Background removed\label{fig:pink-bg-mask}]{%
+	\includegraphics[width=.45\textwidth]{akabeko-pink-bg-mask}%
+}\\
+
+\subfloat[Original image masked on the new background\label{fig:bg-mask}]{%
+	\includegraphics[width=.45\textwidth]{bg-mask.png}%
+}
+\hfill
+\subfloat[Original image with the background replaced\label{fig:akabeko-space-bg}]{%
+	\includegraphics[width=.45\textwidth]{akabeko-space-bg.png}%
+}
+\caption{}
+\label{fig:clust-hier-geo}
+\end{figure}
+
+
+
+
+
+\section*{Motion detection and tracking}
+We will now build a sophisticated motion detection and tracking system with a very simple logic of finding the difference between subsequent frames from a video feed, like a webcam stream, and plotting contours around the area where the difference is detected.
+Let's import the required libraries and initialize the webcam:
+\begin{minted}{python}
+import cv2
+import numpy as np
+cap = cv2.VideoCapture(0)
+\end{minted}
+
+We will need a kernel for the dilation operation, which we will create in advance, rather than creating it every time in the loop:
+\begin{minted}{python}
+k = np.ones((3,3),np.uint8)
+\end{minted}
+
+The following code will capture and store subsequent frames:
+\begin{minted}{python}
+t0 = cap.read()[1]
+t1 = cap.read()[1]
+\end{minted}
+
+Now, we will initiate the while loop and calculate the difference between both frames, and then convert the output to greyscale for further processing:
+\begin{minted}{python}
+while(True):
+	d = cv2.absdiff(t1,t0)
+	grey = cv2.cvtColor(d, cv2.COLOR_BGR2GRAY)
+\end{minted}
+
+The output will be as Figure~\ref{fig:motion-base}, showing the difference of pixels between the frames.
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=.7\textwidth]{motion-grey.png}
+\caption{}
+\label{fig:motion-base}
+\end{figure}
+
+This image may contain some noise, so we will blur it first:
+\begin{minted}{python}
+blur = cv2.GaussianBlur(grey,(3,3),0)
+\end{minted}
+We use the binary threshold to convert this noise-removed output into a binary image with the following code:
+\begin{minted}{python}
+ret, th = cv2.threshold(blur, 15, 255, cv2.THRESH_BINARY)
+\end{minted}
+The final operation is to dilate the image so that it is easier for us to find the boundary clearly:
+\begin{minted}{python}
+dilated = cv2.dilate(th,k,iterations=2)
+\end{minted}
+The output of the preceding step is shown on Figure~\ref{fig:motion-filter}.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=.7\textwidth]{motion-dilated.png}
+\caption{}
+\label{fig:motion-filter}
+\end{figure}
+
+Then, we will find and draw the contours for the preceding image with the following code:
+\begin{minted}{python}
+contours, hierarchy = cv2.findContours(dilated,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+t2 = t0
+cv2.drawContours(t2, contours, -1, (0,255,0), 2 )
+cv2.imshow('Output', t2)
+\end{minted}
+
+Finally, we will assign the latest frame to the older frame and capture the next frame with a webcam:
+\begin{minted}{python}
+t0 = t1
+t1 = cap.read()[1]
+\end{minted}
+
+We will terminate the loop once we detect the \texttt{Esc} keypress, as usual:
+\begin{minted}{python}
+if cv2.waitKey(5) == 27 :
+	break
+\end{minted}
+Once the loop is terminated, we will release the camera and destroy the display window:
+\begin{minted}{python}
+cap.release()
+cv2.destroyAllWindows()
+\end{minted}
+This will draw the contour roughly around the area where the movement is detected, as seen on Figure~\ref{fig:motion-contour}.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=.7\textwidth]{motion-contour.png}
+\caption{A moving hand motion has been detected.}
+\label{fig:motion-contour}
+\end{figure}
+This code works very well for slow movements. You can make the output more interesting by drawing contours with different colours. Also, you can find out the centroid of the contours and draw crosshairs or circles corresponding to the centroids.
 
 
 
