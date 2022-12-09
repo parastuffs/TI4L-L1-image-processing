@@ -48,7 +48,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[4EISA] Image Processing\\ LAB 3 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.0.0\\ page \thepage}
+\rhead{v1.0.1\\ page \thepage}
 \cfoot{}
 %%
 
@@ -137,7 +137,7 @@ fg_mask = cv2.bitwise_and(frame,frame,mask = cv2.bitwise_not(image_mask))
 \end{minted}
 This will extract all the non-green objects, while assigning the colour black to the pixels corresponding to the green background.
 
-Finally, we will add our last two image outputs, which will provide us with the required chroma key effect, by replacing the green screen with the custom background on Figure~\ref{akabeko-space-bg}.
+Finally, we will add our last two image outputs, which will provide us with the required chroma key effect, by replacing the green screen with the custom background on Figure~\ref{fig:akabeko-space-bg}.
 \begin{minted}{python}
 cv2.imshow('Output',cv2.add(bg_mask,fg_mask))
 if cv2.waitKey(1) == 27:
