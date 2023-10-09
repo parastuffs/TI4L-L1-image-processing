@@ -48,7 +48,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[4EISA] Image Processing\\ LAB 3 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.0.1\\ page \thepage}
+\rhead{v1.0.2\\ page \thepage}
 \cfoot{}
 %%
 
@@ -72,7 +72,8 @@ frame=lines,
 framesep=2mm,
 % baselinestretch=1.2,
 fontsize=\small,
-linenos
+linenos,
+tabsize=2
 }
 
 \begin{document}
@@ -100,8 +101,8 @@ cam = cv2.VideoCapture(0)
 
 You can lower the camera resolution to try to get a better frame rate:
 \begin{minted}{python}
-cam.set(3,640)
-cam.set(4,480)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH,640)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 \end{minted}
 
 Let's say your subject is taken on a relatively uniform background as illustrated on Figure~\ref{fig:pink-bg}.
@@ -256,7 +257,7 @@ This will draw the contour roughly around the area where the movement is detecte
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=.7\textwidth]{motion-contour.png}
+\includegraphics[width=.6\textwidth]{motion-contour.png}
 \caption{A moving hand motion has been detected.}
 \label{fig:motion-contour}
 \end{figure}
