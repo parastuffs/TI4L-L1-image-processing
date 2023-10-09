@@ -36,8 +36,6 @@
 \usepackage{multicol}
 \usepackage{multirow}
 
-\langexam{frenchb}
-
 \correction{false}
 %\correction{true}
 
@@ -46,19 +44,19 @@
 
 %% fancy header & foot
 \pagestyle{fancy}
-\lhead{[4EISA] Image Processing\\ LAB 1 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.0.3\\ page \thepage}
+\lhead{[TI4L-L1] Image Processing\\ LAB 1 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
+\rhead{v1.1.0\\ page \thepage}
 \cfoot{}
 %%
 
 \pdfinfo{
 /Author ()
-/Title (4EISA Image Processing, lab 1)
+/Title (TI4L-L1 Image Processing, lab 1)
 /ModDate (D:\pdfdate)
 }
 
 \hypersetup{
-pdftitle={LAB 1 [4EISA] Image Processing},
+pdftitle={LAB 1 [TI4L-L1] Image Processing},
 pdfauthor={},
 pdfsubject={}
 }
@@ -77,29 +75,28 @@ breaklines
 
 \begin{document}
 
-\tptitle{}{Image Processing -- Session 1\\OpenCV on a Raspberry Pi}
+\tptitle{}{Image Processing -- Session 1\\OpenCV}
 
 \section*{Introduction}
-In this session, you will be introduced to \numpy, \opencv and the PiCamera on a raspberryPi 3B+ or 4. The processes will take 4 steps through which you will manipulate different aspects of the image processing on a Pi. Try not to rush the session and just copy-paste the examples. It is important to understand each line of the codes.
+In this session, you will be (re-)introduced to \numpy and \opencv.
+The processes will take 4 steps through which you will manipulate different aspects of image processing on your computer. Try not to rush the session and just copy-paste the examples. It is important to understand each line of the codes.
 
-Before starting, make sure that your pi is correctly connected to the Ethernet or the WiFi in case you need to download new packages.
-You might need to install opencv: \texttt{pip3 install opencv-python} and an additional package: \texttt{libatlas-base-dev}.
-Update your \texttt{numpy} installation: \texttt{pip3 install -U numpy}, then run Python in a terminal and test the version of \opencv. To perform the test, execute the following lines in the terminal:
+You might need to install opencv through \texttt{pip} (\texttt{opencv-python}) or your OS package manager (e.g. \texttt{python-opencv}).
+Run Python in a terminal and test the version of \opencv. To perform the test, execute the following lines in the terminal:
 
 \begin{minted}{shell-session}
 $ python3
 	>>> import cv2
 	>>> print(cv2.__version__)
-	4.6.0
+	4.8.1
 \end{minted}
 
-Do not try to upgrade Raspbian to \texttt{Bullseye} (Debian 11), the support for the packages we will be using completely shifted\footnote{The Picamera support has been basically dropped to shift toward a fully open source library. Problem is, the new one does not support Python's API yet. It's all for the better, but it seriously broke compatibility in the meantime.} and is still, at the time of writing, not compatible with the present labs. We stay on \texttt{Buster} (Debian 10) for now.
-
 Most of the material of the labs are based on the book ``\textit{Raspberry Pi Computer Vision Programming}'' by Ashwin Pajankar and published by Packt. Some extra material and codes are available on their GitHub repository\footnote{\url{https://github.com/PacktPublishing/raspberry-pi-computer-vision-programming}}.
+All the material has first been meant for an embedded environment such as a RaspberryPi, but it will run just fine on your personal computer, as long as you have a webcam.
 
 
-\section*{Step 1 -- \texttt{NumPy} on Raspberry}
-\numpy is a fundamental package that can be used to scientifically compute with Python. \numpy comes with many inbuilt functions for arrays that are usefull to manipulate pictures. Arrays used for \numpy can be converted to and from \opencv. Therefore, any operation on arrays can be converted into \opencv images.
+\section*{Step 1 -- \texttt{NumPy}}\label{sec:step1}
+\numpy is a fundamental package that can be used to scientifically compute with Python. \numpy comes with many inbuilt functions for arrays that are useful to manipulate pictures. Arrays used for \numpy can be converted to and from \opencv. Therefore, any operation on arrays can be converted into \opencv images.
 
 Let’s try some lines and create some arrays:
 \begin{minted}{python}
@@ -113,7 +110,7 @@ array([1, 2, 3])
 array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 \end{minted}
 
-\texttt{Linspace(a,b,c)} creates an array of \texttt{c} equally spaced elements starting from \texttt{a} and ending by \texttt{b}.
+\texttt{linspace(a,b,c)} creates an array of \texttt{c} equally spaced elements starting from \texttt{a} and ending by \texttt{b}.
 \begin{minted}{python}
 >>> a=np.array([1,3,6,9])
 >>> b=np.linspace(0,15,4)
@@ -148,10 +145,10 @@ To start our manipulations, we will need the help of parrots.
 \begin{center}
 \includegraphics[width=.45\textwidth]{parrots.jpg}
 \end{center}
-You can download it at \url{https://raw.githubusercontent.com/parastuffs/4EISA-image-processing/main/Labo%201/parrots.bmp}, but really any image will do at this stage.
+You can download it at \url{https://raw.githubusercontent.com/parastuffs/TI4L-L1-image-processing/main/Labo%201/parrots.bmp}, but really any image will do at this stage.
 
 The \texttt{cv2.imread(file, mode)} method is used to import an image. It takes two arguments. The first argument \texttt{file} is the image filename. The image should either be in the same directory where the Python script is, or the absolute path should be provided to \texttt{cv2.imread()}. It reads images and saves it as a \numpy array.
-The second argument is a flag which specifies the mode the image should be read in. The flag can have following values:
+The second argument is a flag which specifies the mode the image should be read in. The flag can have the following values:
 \begin{description}
 \item[\texttt{cv2.IMREAD\_COLOR}] or 1: This loads a colour image. This is the default flag.
 \item[\texttt{cv2.IMREAD\_GRAYSCALE}] or 0: This loads an image in greyscale mode.
@@ -159,12 +156,12 @@ The second argument is a flag which specifies the mode the image should be read 
 \end{description}
 
 
-Write following code in a new python script:
+Write the following code in a new python script:
 \begin{minted}{python}
 #!/usr/bin/env python3
 #This imports opencv
 import cv2
-#This reads and stores image in color into variable img
+#This reads and stores image in colour into variable img
 img = cv2.imread('parrots.bmp',cv2.IMREAD_COLOR)
 img = cv2.imread('parrots.bmp',1)
 \end{minted}
@@ -197,7 +194,7 @@ cv2.destroyWindow('Parrots')
 \end{minted}
 
 
-\numpy was introduced at the step 1 as a powerful tool to manipulate arrays. To start, you can execute the following code:
+\numpy was introduced at the \href{sec:step1}{step 1} as a powerful tool to manipulate arrays. To start, you can execute the following code:
 
 \begin{minted}{python}
 import cv2
@@ -254,7 +251,7 @@ points = points.reshape((-1,1,2))
 cv2.polylines(image,[points],True,(255,255,0))
 \end{minted}
 
-If you pass False as the third argument in the \texttt{polylines()} function, it would join all the points and would not print a closed shape.\\
+If you pass \texttt{False} as the third argument in the \texttt{polylines()} function, it would join all the points and would not print a closed shape.\\
 
 We can also print text in the image with \texttt{cv2.putText()}. The following code adds text to the image with (80,180) as the bottom-left corner of the text and \texttt{HERSHEY\_DUPLEX2}\footnote{Explore the \href{https://docs.opencv.org/4.x/}{\opencv documentation} to find the other possible fonts.} as the font with the size of 1 and colour pink:
 
@@ -276,54 +273,38 @@ Take your time to get used to the environment and do your own draft.
 
 
 
-\section*{Step 3 – Using Picamera in Python}
-Make sure the camera module is enabled, navigate through \texttt{Raspberry Menu $\rightarrow$ Preferences $\rightarrow$ Raspberry Pi Configuration $\rightarrow$ interfaces $\rightarrow$ camera enable} and reboot the board if you needed to enable it.
-
-The following program quickly demonstrates the basic usage of the picamera module to capture a picture:
+\section*{Step 3 – Using a camera in Python}
+The following program quickly demonstrates the basic usage of a camera to capture a picture using \opencv\footnote{\url{https://docs.opencv.org/4.8.0/d0/da7/videoio_overview.html}}:
 \begin{minted}{python}
-import picamera
-import time
-with picamera.PiCamera() as cam:
-	cam.resolution=(1024,768)
-	cam.start_preview()
-	time.sleep(5)
-	cam.capture('test.jpg')
-\end{minted}
-We have to import time and picamera modules first. The \texttt{cam.start\_preview()} method starts the preview and \texttt{time.sleep(5)} waits for 5 seconds before \texttt{cam.capture()} captures and saves the image in the specified file.
-
-There is an inbuilt function in picamera for time-lapse photography. Let's see its usage using the following program:
-
-\begin{minted}{python}
-import picamera
-import time
-with picamera.PiCamera() as cam:
-	cam.resolution=(640,480)
-	cam.start_preview()
-	time.sleep(3)
-	for count, imagefile in enumerate(cam.capture_continuous('image{counter:02d}.jpg')):
-		print(f"Capturing and saving {imagefile}")
-		time.sleep(1)
-		if count == 10:
-			break
-\end{minted}
-In the preceding code, \texttt{cam.capture\_continuous()} is used to capture the time-lapse sequence using the Pi camera module.\\
-
-Now, we know how to capture an image. Let’s try to capture it as an array and display it with OpenCV through \texttt{cv2.imshow()}. Here are the lines to realise the process.
-
-\begin{minted}{python}
-import picamera
-import picamera.array
-import time
 import cv2
-with picamera.PiCamera() as camera:
-	rawCap=picamera.array.PiRGBArray(camera)
-	camera.start_preview()
-	time.sleep(6)
-	camera.capture(rawCap,format="bgr")
-image=rawCap.array
-cv2.imshow("Test",image)
-cv2.waitKey(0)
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+while (True):
+	ret, frame = cam.read()
+	cv2.imshow('Detected',frame)
+	if cv2.waitKey(5) == 27: # Quit with escape key
+		break
 cv2.destroyAllWindows()
+cam.release()
+\end{minted}
+The \texttt{VideoCapture} method takes as first mandatory argument the id of the camera you want to use. You might have several on your computer, even using a single device as many modern webcam embed both regular and infrared sensors.
+Using the \texttt{set} method, you can change some settings, such as the capture definition.
+
+The image read with the \texttt{read} method can be displayed or saved in a file. Inserting a delay is an easy way to build a time-lapse:
+\begin{minted}{python}
+import cv2
+import time
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+frames = 10 # total number of frames to capture
+delay = 0.5 # delay in seconds
+for i in range(frames):
+	ret, frame = cam.read()
+	cv2.imwrite(f"img_{str(i+1).zfill(2)}.jpg", frame)
+	time.sleep(delay)
+cam.release()
 \end{minted}
 
 
@@ -331,7 +312,7 @@ cv2.destroyAllWindows()
 
 
 \section*{Step 4 -- Basic image processing}
-First of all, to process an image it is interesting to know the properties of the image. to obtain them we simply need the following code:
+First of all, to process an image it is interesting to know its properties. To obtain them we simply need the following code:
 
 \begin{minted}{python}
 import cv2
@@ -359,7 +340,7 @@ Here is an example of use:
 \begin{minted}{python}
 import cv2
 img1 = cv2.imread('parrots.bmp',1)
-img2 = cv2.imread('another_img.bmp',1)
+img2 = cv2.imread('shiba.bmp',1)
 cv2.imshow('Image1',img1)
 cv2.waitKey(0)
 cv2.imshow('Image2',img2)
@@ -373,7 +354,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 \end{minted}
 
-Like Whiskies, you can also blend your images. The \texttt{cv2.addWeighted()} function calculates the weighted sum of two images. Because of the weight factor, it provides a blending effect to the images. Add the following lines of code before \texttt{destroyAllWindows()} in the previous code listing to see this function in action:
+Like whiskies, you can also blend your images. The \texttt{cv2.addWeighted()} function calculates the weighted sum of two images. Because of the weight factor, it provides a blending effect to the images. Add the following lines of code before \texttt{destroyAllWindows()} in the previous code listing to see this function in action:
 
 \begin{minted}{python}
 cv2.addWeighted(img1,0.5,img2,0.5,0)
@@ -400,7 +381,7 @@ import cv2
 import numpy as np
 import time
 img1 = cv2.imread('parrots.bmp',1)
-img2 = cv2.imread('another_img.bmp',1)
+img2 = cv2.imread('shiba.bmp',1)
 for i in np.linspace(0,1,40):
 	alpha = i
 	beta = 1-alpha
@@ -478,8 +459,8 @@ You may want to have a look at the functionality of \texttt{cv2.copyMakeBorder()
 
 
 \section*{Challenge}
-For this part you are free to experience any program with \opencv and the PiCamera.
-Navigate on the \opencv API: \url{https://docs.opencv.org/4.x/} and the PiCamera documentation: \url{https://picamera.readthedocs.io/}.\\
+For this part you are free to experience any program with \opencv and your camera.
+Navigate on the \opencv API \url{https://docs.opencv.org/4.x/} and the \opencv \texttt{VideoCapture} class reference: \url{https://docs.opencv.org/4.8.0/d8/dfe/classcv_1_1VideoCapture.html}.\\
 
 As a good start try to take a picture of the EuroRobot Playground and isolate the different area of the player 1 and player 2. Then find a way to isolate the different pathways.
 Your challenge is to analyse the playground in depth and to obtain as much information as possible from it.
