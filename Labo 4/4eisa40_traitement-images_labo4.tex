@@ -48,7 +48,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[4EISA] Image Processing\\ LAB 4 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.0.0\\ page \thepage}
+\rhead{v1.1.0\\ page \thepage}
 \cfoot{}
 %%
 
@@ -132,8 +132,24 @@ Your report should be no longer than four pages long and have at least the follo
 	\item How to take it further.
 \end{itemize}
 
-Your code can be either handed in an archive or through GitHub and the like.
-The demonstration should be a recording of your screen showing the processing in action\footnote{Checkout \href{https://obsproject.com/}{OBS} to record your screen.}. Upload it on a video hosting platform and add a link in your report, rather than uploading it directly on Claco.
+Your code needs to be hosted on a versioning platform, such as GitHub or GitLab.
+The demonstration should be a recording of your screen showing the processing in action\footnote{Checkout \href{https://obsproject.com/}{OBS} to record your screen.}. Upload it on a video hosting platform and add a link in your report. No \textit{not} upload it on Claco or send it via email.
+
+\subsection*{The AI Question}
+Be it \href{https://github.com/features/copilot}{GitHub Copilot}, \href{https://bard.google.com/}{Google Bard} or \href{https://chat.openai.com}{OpenAI ChatGPT}, you might be tempted to seek some support from a generative model, and that's all right!
+However you have to be transparent about it.
+If you use some code snippet from an online resource, you would need to cite the original work for adequate attribution and for verification. The same goes for language models: you need to acknowledge their use.
+
+In practice, \textit{if} you choose to use such tools, you need to:
+\begin{enumerate}
+	\item Disclose it. Be as specific as you can about the version used.
+	\item Write a full write-up of your prompt engineering\footnote{Example: \href{https://github.com/JBlocklove/tt03-qtchallenges-chatgpt_4}{GitHub repo}, \href{https://arxiv.org/abs/2305.13243}{publication} and \href{https://www.youtube.com/watch?v=6vC3t_soJok}{authors interview}}. How did you make the model generate the parts you needed? How did you modify them? Did you use a specific context?
+	\item Write a paragraph about the criticism one could argue \textit{against} the use of the system you used. Reference your arguments.
+\end{enumerate}
+This extra material does \textit{not} count toward the page count stated above.\\
+
+Be warned that lack of transparency of whatever form or missing code attribution will be heavily penalised.
+
 
 
 
