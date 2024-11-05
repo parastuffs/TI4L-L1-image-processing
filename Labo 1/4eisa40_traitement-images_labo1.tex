@@ -1,3 +1,7 @@
+% CHANGELOG
+% v1.1.1 -- 2024-11-05
+% 	Update opencv version to 4.10.0.
+
 \documentclass{labo}
 \usepackage[utf8x]{inputenc}
 
@@ -45,7 +49,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[TI4L-L1] Image Processing\\ LAB 1 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.1.0\\ page \thepage}
+\rhead{v1.1.1\\ page \thepage}
 \cfoot{}
 %%
 
@@ -88,7 +92,7 @@ Run Python in a terminal and test the version of \opencv. To perform the test, e
 $ python3
 	>>> import cv2
 	>>> print(cv2.__version__)
-	4.8.1
+	4.10.0
 \end{minted}
 
 Most of the material of the labs are based on the book ``\textit{Raspberry Pi Computer Vision Programming}'' by Ashwin Pajankar and published by Packt. Some extra material and codes are available on their GitHub repository\footnote{\url{https://github.com/PacktPublishing/raspberry-pi-computer-vision-programming}}.
@@ -274,7 +278,7 @@ Take your time to get used to the environment and do your own draft.
 
 
 \section*{Step 3 – Using a camera in Python}
-The following program quickly demonstrates the basic usage of a camera to capture a picture using \opencv\footnote{\url{https://docs.opencv.org/4.8.0/d0/da7/videoio_overview.html}}:
+The following program quickly demonstrates the basic usage of a camera to capture a picture using \opencv\footnote{\url{https://docs.opencv.org/4.10.0/d0/da7/videoio_overview.html}}:
 \begin{minted}{python}
 import cv2
 cam = cv2.VideoCapture(0)
@@ -460,7 +464,7 @@ You may want to have a look at the functionality of \texttt{cv2.copyMakeBorder()
 
 \section*{Challenge}
 For this part you are free to experience any program with \opencv and your camera.
-Navigate on the \opencv API \url{https://docs.opencv.org/4.x/} and the \opencv \texttt{VideoCapture} class reference: \url{https://docs.opencv.org/4.8.0/d8/dfe/classcv_1_1VideoCapture.html}.\\
+Navigate on the \opencv API \url{https://docs.opencv.org/4.x/} and the \opencv \texttt{VideoCapture} class reference: \url{https://docs.opencv.org/4.10.0/d8/dfe/classcv_1_1VideoCapture.html}.\\
 
 As a good start try to take a picture of the EuroRobot Playground and isolate the different area of the player 1 and player 2. Then find a way to isolate the different pathways.
 Your challenge is to analyse the playground in depth and to obtain as much information as possible from it.
