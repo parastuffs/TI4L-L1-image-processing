@@ -1,3 +1,8 @@
+% CHANGELOG
+% v1.2.0 -- 2024-11-06
+% 	If not using an LLM for coding, write about the documentation.
+	
+
 \documentclass{labo}
 \usepackage[utf8x]{inputenc}
 
@@ -48,7 +53,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[4EISA] Image Processing\\ LAB 4 \ifthenelse{\boolean{corrige}}{~-- correction}{}}
-\rhead{v1.1.0\\ page \thepage}
+\rhead{v1.2.0\\ page \thepage}
 \cfoot{}
 %%
 
@@ -79,7 +84,7 @@ linenos
 
 \tptitle{}{Image Processing -- Session 4\\}
 
-This session is devoted to the assignment you will need to handle by the date specified on Claco.
+This session is devoted to the assignment you will need to submit by the date specified on Claco.
 You can choose any subject within the following list or make up your own.
 For each challenge, there are several levels; the higher the level reached, the better.
 
@@ -118,12 +123,12 @@ You have a great idea about a challenge involving computer vision and \opencv? G
 \section*{Evaluation}
 You should hand the following items in your submission:
 \begin{itemize}
-	\item A report
+	\item A report (PDF, English)
 	\item Your code
 	\item A demonstration
 \end{itemize}
 
-Your report should be no longer than four pages long and have at least the following key points:
+Your report should be no longer than five pages long and have at least the following key points:
 \begin{itemize}
 	\item Description of the context/situation chosen and expected results.
 	\item Identification of the key challenges of the problem.
@@ -136,16 +141,19 @@ Your code needs to be hosted on a versioning platform, such as GitHub or GitLab.
 The demonstration should be a recording of your screen showing the processing in action\footnote{Checkout \href{https://obsproject.com/}{OBS} to record your screen.}. Upload it on a video hosting platform and add a link in your report. No \textit{not} upload it on Claco or send it via email.
 
 \subsection*{The AI Question}
-Be it \href{https://github.com/features/copilot}{GitHub Copilot}, \href{https://bard.google.com/}{Google Bard} or \href{https://chat.openai.com}{OpenAI ChatGPT}, you might be tempted to seek some support from a generative model, and that's all right!
+Be it \href{https://github.com/features/copilot}{GitHub Copilot}, \href{https://gemini.google.com/}{Google Gemini} or \href{https://chat.openai.com}{OpenAI ChatGPT}, you might be tempted to seek some support from a generative model, and that's all right!
 However you have to be transparent about it.
 If you use some code snippet from an online resource, you would need to cite the original work for adequate attribution and for verification. The same goes for language models: you need to acknowledge their use.
 
-In practice, \textit{if} you choose to use such tools, you need to:
+In practice, \textit{if} you choose to use such tools, you \textit{must}:
 \begin{enumerate}
 	\item Disclose it. Be as specific as you can about the version used.
 	\item Write a full write-up of your prompt engineering\footnote{Example: \href{https://github.com/JBlocklove/tt03-qtchallenges-chatgpt_4}{GitHub repo}, \href{https://arxiv.org/abs/2305.13243}{publication} and \href{https://www.youtube.com/watch?v=6vC3t_soJok}{authors interview}}. How did you make the model generate the parts you needed? How did you modify them? Did you use a specific context?
 	\item Write a paragraph about the criticism one could argue \textit{against} the use of the system you used. Reference your arguments.
 \end{enumerate}
+
+Even if you do \textit{not} use such tools, you will need some documentation or central resource to grasp what is possible using openCV or other libraries. Those should also be referenced and you \textit{must} write a paragraph about your experience using them; Are there code snippets in the documentation to illustrate how the features work? Are there write-ups that summarise feature sets? How would \textit{you} write a documentation for your project?
+
 This extra material does \textit{not} count toward the page count stated above.\\
 
 Be warned that lack of transparency of whatever form or missing code attribution will be heavily penalised.
