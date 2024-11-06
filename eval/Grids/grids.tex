@@ -1,0 +1,136 @@
+ \documentclass[a4paper,11pt,oneside]{article}
+
+ \input{preamble.tex}
+
+
+% \makeatletter
+% \renewcommand{\@chapapp}{Volet}
+% \makeatother
+
+% \makeglossaries
+% \loadglsentries{glossary}
+
+%%%%%%%%%%%%%%%%%%
+%% Spider web
+%%%%%%%%%%%%%%%%%%
+% https://texample.net/tikz/examples/spiderweb-diagram/
+
+\newcommand{\D}{4} % number of dimensions (config option)
+\newcommand{\U}{3} % number of scale units (config option)
+
+\newdimen\R % maximal diagram radius (config option)
+\R=3.5cm 
+\newdimen\L % radius to put dimension labels (config option)
+\L=4cm
+
+\newcommand{\Angle}{360/\D} % calculated angle between dimension axes  
+
+%%%%%%%%%%%%%%%%%%
+
+\newcommand{\etudiants}{étudiant$\cdot$es}
+\newcommand{\etudiant}{étudiant$\cdot$e}
+
+\begin{document}
+
+\begin{center}
+\Large
+\textbf{Image Processing Project evaluation grids\\{\footnotesize v1.0.0}}
+\end{center}
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{8cm}|>{\raggedright\arraybackslash}p{4.5cm}|>{\raggedright\arraybackslash}p{5cm}|} \hline
+Student: & Academic year: & Project: \\
+ & & \\
+\hline
+\end{tabular}
+
+\vspace*{0.2cm}
+
+The following grids will guide the evaluation. All the indications for each criterium are \textbf{non-exhaustive}.
+
+Legend: \textbf{E}: Excellent, went beyond what was expected; \textbf{VG}: Very Good, expectations have been met; \textbf{G}: Good, lacking to some level; \textbf{S}: Sufficient, meets the bare minimum requirements, severely lacking; \textbf{I/A}: Insufficient/Absent, below par.
+
+\vspace*{0.2cm}
+
+% ########   ########   #########  ##         ########   ##       ##  
+% ##     ##  ##     ##  ##         ##            ##      ###     ###  
+% ##     ##  ##     ##  ##         ##            ##      ## ## ## ##  
+% #######    ########   ######     ##            ##      ##  ###  ##  
+% ##         ##   ##    ##         ##            ##      ##       ##  
+% ##         ##    ##   ##         ##            ##      ##       ##  
+% ##         ##     ##  #########  #########  ########   ##       ##  
+
+\begin{tabular}{|>{\raggedright\arraybackslash}p{11cm}>{\centering\arraybackslash}p{1cm}>{\centering\arraybackslash}p{1cm}>{\centering\arraybackslash}p{1cm}>{\centering\arraybackslash}p{1cm}>{\centering\arraybackslash}p{1cm}|}
+\hline
+\textbf{Criteria} & E & VG & G & S & I/A \\ \hline
+
+\tabitem \textbf{Demosntration}
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Testing}: Does it wrk as intented? Can I run the code and make it work easily?
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Writing proficiency}: Not a generic description, personal contributions, no mistakes, master-level report, not a story.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Objectives are clear}: Not too generic or vague.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem A \textbf{sound strategy} is drawn: All objectives are addressed, the strategy goes beyond using a given library.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Analysis}: Results are analysed, the limits of the implementation are identified.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Perspectives}
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Code and implementation}: Documented, runs OK, good performance, usable.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Difficulty level}: Basic, challenging, or real head scratcher that goes above and beyond. 
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\tabitem \textbf{Coding aid analysis}: Full prompt logs, analysis of the interaction, documentation or central resource used, what makes it usable or not.
+& $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\multicolumn{6}{|l|}{Comments:} \\
+\multicolumn{6}{|l|}{} \\
+\hline
+
+\multicolumn{4}{|l|}{\textbf{Global comments:}} & \multicolumn{2}{l|}{\textbf{Mark:}} \\
+\multicolumn{4}{|l|}{} & \multicolumn{2}{l|}{} \\
+\multicolumn{4}{|l|}{} & \multicolumn{2}{l|}{} \\
+\hline
+\end{tabular}
+
+
+% \pagenumbering{arabic}
+
+
+\end{document}

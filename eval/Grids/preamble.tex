@@ -1,0 +1,392 @@
+\usepackage[utf8]{inputenc}
+\usepackage[style=apa]{biblatex}
+% \usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+% \usepackage{palatino}
+% \usepackage{tgadventor}
+% \usepackage{sectsty}
+% \usepackage{tgtermes}
+
+%%%%%%%%%%%%%%%
+% Math
+%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[charter]{mathdesign} % Use charter in math, but also makes the µ straight when it should be, like for units.
+\usepackage{nicefrac}
+\usepackage{dsfont}
+
+% \usepackage[sf,bf,pagestyles]{titlesec} % make section headings \sffamily
+
+\usepackage[dvipsnames, table]{xcolor}
+\definecolor{shadecolor}{RGB}{219, 48, 122} % Background colour for 'shaded' environment.
+\definecolor{lightcoral}{rgb}{0.94, 0.5, 0.5}
+\definecolor{sandybrown}{rgb}{0.96, 0.64, 0.38}
+\definecolor{khaki}{rgb}{0.76, 0.69, 0.57}
+\definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{mediumturquoise}{rgb}{0.28, 0.82, 0.8}
+\definecolor{cornflowerblue}{rgb}{0.39, 0.58, 0.93}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+% \usepackage{subcaption}%subfigures, not compatible with the 'caption' package
+% \usepackage[hyphens]{url}
+\usepackage[breaklinks=true,
+            colorlinks=true,
+            linkcolor=MidnightBlue,
+            citecolor=MidnightBlue,
+            urlcolor=MidnightBlue]{hyperref}
+% \usepackage[breaklinks=true]{hyperref}
+\usepackage{doi} % Make doi in bibliography hyperlinks.
+\usepackage[french]{varioref}
+\usepackage{bibentry}
+\nobibliography* %Stores all bibliography entries, so that we can insert them in corpus with \bibentry{key}.
+% \usepackage[xindy, toc, nonumberlist]{glossaries}
+\usepackage[toc, acronym]{glossaries-extra}
+% nonumberlist package option to not display the page on which the entry is used.
+% \gls{label} to invoke the entry.
+% \glsreset{label} to reset the first occurence of the entry.
+% \acrlong{label} to print the long version of the acronym.
+% \acrshort{label} to print the short version of the acronym.
+\renewcommand*{\glstextformat}[1]{\textcolor{black}{#1}}
+\setabbreviationstyle[acronym]{long-short}
+
+% \usepackage{todonotes}
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\itshape} 	% https://tex.stackexchange.com/questions/235852/how-to-make-all-quotes-italicised
+										% 
+
+\usepackage{textcomp} % For \textmu, among other things.
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% TOC
+%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{minitoc}
+
+%%%%%%%%%%%%%%%%%%%
+% Sections control
+%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{2} % 2 = down to subsection in numbering
+\setcounter{tocdepth}{2} % 2 = down to subsection in toc
+
+%%%%%%%%%%%%
+% Tables
+%%%%%%%%%%%%
+\usepackage{dcolumn}
+	\newcolumntype{.}{D{.}{.}{2}}
+\usepackage{booktabs}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\usepackage{rotating} % sidewaystable environment
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+
+%%%%%%%%%%%%%%%%%
+% Lists
+%%%%%%%%%%%%%%%%%
+\usepackage{enumitem} % Used by [label=...] to redefine list bullets.
+\usepackage{wasysym} % To use $\RHD$
+
+
+% %%%%%%%%% vvvvvvv
+% % Anthony Debruyn 
+% \let\oldCaption\caption
+% \renewcommand{\caption}[2]{
+% \oldCaption[#1]{{\small\bfseries #1: }\small #2}
+% }
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % NEW STYLES
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \captiondelim{ -- }
+% \captionnamefont{\small\bfseries}
+% \captiontitlefont{\small}
+% \precaption{\rule{\linewidth}{0.4pt}\\}
+% % Anthony Debruyn
+% %%%%%%%%% ^^^^^^^
+
+
+% \setlength{\spinemargin}{1pt}
+\usepackage[scale=1]{geometry}
+\geometry{
+  top=1cm,
+  inner=0.5in,
+  outer=0.5in,
+  bottom=0.5in,
+  headheight=3ex,
+  headsep=5ex,
+}
+% \usepackage{fullpage}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+
+% \pagestyle{ruled}
+% \headstyles{memman}
+% % \usepackage{dpfloat}     % floats on facing pages
+% \setlrmarginsandblock{1in}{1in}{*} % left/right margins
+% \setulmarginsandblock{4cm}{*}{1} % upper/lower margins
+% \checkandfixthelayout
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter style, see manual section 6.5 and appendix B.1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \chapterstyle{veelo}
+% \chapterstyle{crosshead}
+% \chapterstyle{thatcher}
+% \chapterstyle{madsen}
+% \chapterstyle{lyhne}
+% \chapterstyle{ger}
+% \chapterstyle{dash}
+% \chapterstyle{chappell}
+% \chapterstyle{companion}
+% \chapterstyle{demo3} % memman default (see manual p.103)
+
+%%%%%%%%%%%%%%%%%%%%
+% Section style
+%%%%%%%%%%%%%%%%%%%%
+% \setsecheadstyle{\normalfont\Large\bfseries\scshape\raggedright}
+
+
+
+\usepackage[margin=1cm, small]{caption}
+\usepackage{subfig}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%
+% \usepackage[chapter]{algorithm} % The default numbering system for the algorithm package is to number algorithms sequentially. This is often not desirable, particularly in large documents where numbering according to chapter is more appropriate. The numbering of algorithms can be influenced by providing the name of the document component within which numbering should be recommenced. The legal values for this option are: part, chapter, section, subsection, subsubsection or nothing (default). https://en.wikibooks.org/wiki/LaTeX/Algorithms
+\usepackage[noend]{algpseudocode} % From algorithmicx
+
+%%%%%%%%%%%%
+% Vertical line trick in algorithms, https://tex.stackexchange.com/questions/292815/how-can-i-create-vertical-lines-indentation-in-algorithm-pseudo-code-correctly-w/292838#292838
+\makeatletter
+% start with some helper code
+% This is the vertical rule that is inserted
+\newcommand*{\algrule}[1][\algorithmicindent]{%
+  \makebox[#1][l]{%
+    \hspace*{.2em}% <------------- This is where the rule starts from
+    \color{black!10}\vrule height .75\baselineskip depth .25\baselineskip
+  }
+}
+
+\newcount\ALG@printindent@tempcnta
+\def\ALG@printindent{%
+    \ifnum \theALG@nested>0% is there anything to print
+    \ifx\ALG@text\ALG@x@notext% is this an end group without any text?
+    % do nothing
+    \else
+    \unskip
+    % draw a rule for each indent level
+    \ALG@printindent@tempcnta=1
+    \loop
+    \algrule[\csname ALG@ind@\the\ALG@printindent@tempcnta\endcsname]%
+    \advance \ALG@printindent@tempcnta 1
+    \ifnum \ALG@printindent@tempcnta<\numexpr\theALG@nested+1\relax
+    \repeat
+    \fi
+    \fi
+}
+% the following line injects our new indent handling code in place of the default spacing
+\patchcmd{\ALG@doentity}{\noindent\hskip\ALG@tlm}{\ALG@printindent}{}{\errmessage{failed to patch}}
+\patchcmd{\ALG@doentity}{\item[]\nointerlineskip}{}{}{} % no spurious vertical space
+% end vertical rule patch for algorithmicx
+\makeatother
+%
+%%%%%%%%%%%%
+
+
+\usepackage{mdframed}
+\newmdenv[
+  topline=false,
+  bottomline=false,
+  rightline=false,
+  skipabove=0,%Space above the frame. I want none so that it's close to the def title.
+  skipbelow=2em,%Below the frame. Leave it some room to breath.
+  innerbottommargin=0,%Margin between the bottom of the text and the bottom of the frame.
+  innertopmargin=0,%Margin between the top of the text and the top of the frame.
+]{siderules}
+\usepackage{framed}
+
+\usepackage{amsthm}%theorems
+\newtheoremstyle{customdef}%
+	{\topsep}% above the theorem
+	{\topsep}% below the theorem
+	% {\itshape}% body
+	{}% body
+	{0pt}% indent
+	{\bfseries}% head
+	{}% punctuation between head and body
+	{ }% Space after theorem head
+	{\thmname{#1}\thmnumber{ #2}: \thmnote{#3}}
+\theoremstyle{customdef}
+\newtheorem{definition}{Definition}
+
+% Redefine QED symbol
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% Arg1: Title of the definition
+% Arg2: Label
+\newenvironment{defi}[2]
+ {\begin{definition}[#1]\label{#2}\end{definition}\begin{siderules}}
+ {\end{siderules}}
+ % {\begin{definition}[#1]\label{#2}\end{definition}\vspace{-1em}\begin{siderules}\vspace{-0.5em}}
+ % {\vspace{-0.5em}\end{siderules}}
+
+
+% %https://tex.stackexchange.com/questions/84478/how-to-format-title-and-abstract
+% \renewenvironment{abstract}{%
+% \begin{center}\begin{minipage}{0.85\textwidth}
+% \rule{\textwidth}{1pt}}
+% {\par\noindent\rule{\textwidth}{1pt}\end{minipage}\end{center}}
+
+
+
+
+\usepackage{titling}
+
+%%%%%%%%%%%%%%%%%%
+% Paragraphs
+%%%%%%%%%%%%%%%%%%
+% \nonzeroparskip
+\setlength{\parindent}{0pt}
+
+\linespread{1.1}
+% \linespread{1.6} % Double-spacing
+
+
+%%%%%%%%%%%%%%
+% Listings
+%%%%%%%%%%%%%%
+\usepackage{minted}
+
+
+%%%%%%%%%%%%%%%
+% Quotes
+%%%%%%%%%%%%%%%
+\usepackage{csquotes}
+
+
+%%%%%%%%%%%%%%%%%%%%
+% Fancy verbatim
+%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyvrb} %BVerbatim environment
+
+
+%%%%%%%%%%%%%%%%%%%%
+% Units
+%%%%%%%%%%%%%%%%%%%%
+\usepackage{siunitx}
+
+%%%%%%%%%%%%%%%%%%%%
+% Numbers
+%%%%%%%%%%%%%%%%%%%%
+\usepackage{numprint}
+\npthousandsep{,}
+
+%%%%%%%%%%%%%%%%%%%%
+% Graphs and plots
+%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{patterns,babel,positioning,calc}
+\usepackage[]{circuitikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{units}
+\sisetup{
+  round-mode          = places,
+  round-precision     = 2,
+}
+\usepgfplotslibrary{external} 
+% \tikzexternalize[optimize=false] %With optimize=true, tikz is not happy with my includinggraphics inside a tikz env.
+\tikzexternalize[optimize=true]
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Font awesome icons
+%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fontawesome}
+
+%%%%%%%%%%%%%%%%
+% Extra symbols
+%%%%%%%%%%%%%%%%
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Include external PDF
+%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pdfpages}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Anchor chapter at root, out of a part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{bookmark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Highlight environment
+%%%%%%%%%%%%%%%%%%%%%%%%
+\newenvironment{highlight}%
+{%
+  \begin{mdframed}[%
+      topline=false,
+      bottomline=false,
+      rightline=false,
+      linewidth=2pt,
+      backgroundcolor=gray!8]
+}%
+{\end{mdframed}}
+
+\newenvironment{action}%
+{%
+  \begin{mdframed}[%
+      frametitle=Exemple d'actions,
+      topline=false,
+      bottomline=false,
+      rightline=false,
+      linewidth=2pt,
+      backgroundcolor=gray!5]
+}%
+{\end{mdframed}}
+
+\newenvironment{correction}%
+{%
+  \begin{mdframed}[%
+      frametitle=Correction,
+      topline=false,
+      bottomline=false,
+      rightline=false,
+      linewidth=2pt,
+      backgroundcolor=gray!5]
+}%
+{\end{mdframed}}
+
+\newenvironment{cours}%
+{%
+  \begin{mdframed}[%
+      frametitle=Retombées sur les enseignements,
+      topline=false,
+      bottomline=false,
+      rightline=false,
+      linewidth=2pt,
+      backgroundcolor=gray!5]
+}%
+{\end{mdframed}}
+
+
+%%%%%%%%%%%%%%
+% Lorem Ipsum
+%%%%%%%%%%%%%%
+\usepackage{lipsum} 
+
+
+\usepackage{svg}
+
+%%%%% Point médian
+% https://www.netplume.net/inserer-un-point-mediant/
+\def\cdt{\kern-0.5pt\ensuremath\cdot\kern-0.5pt}
